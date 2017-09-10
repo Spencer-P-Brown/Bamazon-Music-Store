@@ -1,8 +1,19 @@
+--Run this in mySQL workbench to create your database--
+-------------------------------------------------------
 CREATE DATABASE bamazon_db;
+-----------------------------------
 
+
+--Run this in mySQL workbench to navigate to your new database--
+----------------------------------------------------------------
 USE bamazon_db;
+-----------------------------------
+-----------------------------------
 
 
+
+--Run this in mySQL workbench to create your table with empty fields--
+----------------------------------------------------------------------
 CREATE TABLE products(
     item_id INTEGER auto_increment NOT NULL primary key,
     product_name VARCHAR (100) NOT NULL,
@@ -10,8 +21,13 @@ CREATE TABLE products(
     price DECIMAL (10, 2) NOT NULL, 
     stock_quantity INTEGER (11) NOT NULL
 );
+-----------------------------------
+-----------------------------------
 
 
+
+--Run this in your mySQL workbench to populate data inside of your new table--
+------------------------------------------------------------------------------
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ("Beggar's Banquet - Rolling Stones", "vinyl records", 17.29, 7),
 ("Ace of Spades - Motorhead", "vinyl records", 15.99, 11),
