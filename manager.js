@@ -20,9 +20,43 @@ connection.connect(function(err){
 	}
 });
 
+//View all products function
+function viewProduct(){
+	connection.query("SELECT * FROM products", function (err, res){
+		if (err) console.log(err);
+		else{
+		//iterates through each row in db printing pertinent info
+			for (var i = 0; i < res.length; i++){
+				console.log("Item ID = " + res[i].item_id + " | " + res[i].product_name + " | " 
+			 			+ "Department - " + res[i].department_name + " | " + "In Stock:" + res[i].stock_quantity);
+			}
+
+			taskList();
+		}
+	})
+		
+}
+
 //main manager function, will be able to choose from several different tasks
 
 function taskList(){
+	inquirer.prompt([
+		{
+			type: "list",
+			message: "What would you like to do?",
+			choices: ["View Products", "View Low Inventory", "Add Inventory to Existing Product", "Add New Product", "Logout"],
+			name: "task"
+		}
+	]).then(function(answer){
+		if(answer.task == "View Products"){
+			viewProduct();
+		}
+		else{
+			console.log("invalid entry");
+		}
+	});
 	//will ask customer what they want to do
 	//view all products, view low inventory products, Add to inventory, add new product or log out
 }
+
+taskList()
