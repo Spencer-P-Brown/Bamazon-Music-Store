@@ -37,9 +37,27 @@ function viewProduct(){
 		
 }
 
+//View products with 5 or less units in stock
+function lowInv(){
+	connection.query("SELECT item_id, product_name, department_name, stock_quantity FROM products WHERE stock_quantity < 6",
+		function(err, res){
+			if (err) console.log(err);
+			else{
+				console.log(res);
+
+				for (var i = 0; i < res.length; i++){
+					console.log("Item ID = " + res[i].item_id + " | " + res[i].product_name + " | " 
+						+ "Department" + res[i].department_name + " | " + "Stock Quantity: " + res[i].stock_quantity);
+			}
+
+			taskList();
+		}
+	})
+}
+
 //main manager function, will be able to choose from several different tasks
 
-function taskList(){
+function taskList() {
 	inquirer.prompt([
 		{
 			type: "list",
@@ -47,16 +65,21 @@ function taskList(){
 			choices: ["View Products", "View Low Inventory", "Add Inventory to Existing Product", "Add New Product", "Logout"],
 			name: "task"
 		}
-	]).then(function(answer){
-		if(answer.task == "View Products"){
+	]).then(function(answer) {
+		if(answer.task == "View Products") {
 			viewProduct();
 		}
+		else if(answer.task == "View Low Inventory") {
+			lowInv();
+		}
+
 		else{
-			console.log("invalid entry");
+			console.log("that is not a valid entry at this time");
 		}
 	});
 	//will ask customer what they want to do
 	//view all products, view low inventory products, Add to inventory, add new product or log out
 }
+
 
 taskList()
