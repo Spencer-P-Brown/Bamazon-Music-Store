@@ -55,6 +55,33 @@ function lowInv(){
 	})
 }
 
+function restock() {
+	inquirer.prompt([
+		{
+			type: "input",
+			message: "What is the Item ID of the product you would like to stock?",
+			name: "id"
+		},
+		{
+			type: "input",
+			message: "How many more units would you like to order?",
+			name: "order"
+		}
+	]).then(function(answers){
+		connection.query("SELECT item_id, stock_quantity FROM products WHERE ?",
+		{item_id: answers.id}, function(err, res){
+			if (err) console.log(err);
+			var newStock = res[0].stock_quantity + parseInt(answers.order);
+					
+			connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: newStock}, {item_id: answers.id}],
+			function(err, res){
+				if (err) console.log(err);
+				console.log("Item ID :" + answers.id + " now has " + newStock + " units in stock!");
+				taskList();
+			})
+		})	
+	})
+}
 //main manager function, will be able to choose from several different tasks
 
 function taskList() {
@@ -72,13 +99,16 @@ function taskList() {
 		else if(answer.task == "View Low Inventory") {
 			lowInv();
 		}
-
+		
+		else if(answer.task == "Add Inventory to Existing Product") {
+			restock();
+		}
 		else{
 			console.log("that is not a valid entry at this time");
 		}
 	});
 	//will ask customer what they want to do
-	//view all products, view low inventory products, Add to inventory, add new product or log out
+	// Add to inventory, add new product or log out
 }
 
 
