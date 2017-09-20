@@ -15,9 +15,6 @@ var connection = mysql.createConnection({
 connection.connect(function(err){
 	if (err) throw err;
 
-	else{
-		console.log("asdfasdf");
-	}
 });
 
 //View all products function
@@ -55,6 +52,7 @@ function lowInv(){
 	})
 }
 
+//function to add stock to existing products
 function restock() {
 	inquirer.prompt([
 		{
@@ -68,11 +66,13 @@ function restock() {
 			name: "order"
 		}
 	]).then(function(answers){
+		//Selects the item id of the product that needs to be restocked
 		connection.query("SELECT item_id, stock_quantity FROM products WHERE ?",
 		{item_id: answers.id}, function(err, res){
 			if (err) console.log(err);
 			var newStock = res[0].stock_quantity + parseInt(answers.order);
-					
+			
+			//updates stock quantity based on user input		
 			connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: newStock}, {item_id: answers.id}],
 			function(err, res){
 				if (err) console.log(err);
@@ -92,6 +92,7 @@ function taskList() {
 			choices: ["View Products", "View Low Inventory", "Add Inventory to Existing Product", "Add New Product", "Logout"],
 			name: "task"
 		}
+		
 	]).then(function(answer) {
 		if(answer.task == "View Products") {
 			viewProduct();
@@ -107,8 +108,9 @@ function taskList() {
 			console.log("that is not a valid entry at this time");
 		}
 	});
+
 	//will ask customer what they want to do
-	// Add to inventory, add new product or log out
+	//add new product or log out
 }
 
 
